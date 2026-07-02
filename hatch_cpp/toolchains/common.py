@@ -101,6 +101,9 @@ class HatchCppLibrary(BaseModel, validate_assignment=True):
         return value
 
     def get_qualified_name(self, platform):
+        if self.binding == "cpython" and not self.py_limited_api:
+            suffix = get_config_var("EXT_SUFFIX")
+            return f"{self.name}{suffix}"
         if platform == "win32":
             suffix = "dll" if self.binding == "generic" else "pyd"
         elif platform == "darwin":
